@@ -9,6 +9,9 @@ npm-debug.log*
 node_modules/
 jspm_packages/
 
+echo node_modules/ 
+echo .env >> 
+
 
 # Optional npm cache directory
 .npm
