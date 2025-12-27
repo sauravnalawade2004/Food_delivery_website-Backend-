@@ -7,6 +7,7 @@ import foodRouter from './routes/foodroute.js';
 import userRouter from './routes/userroute.js';
 import cartRouter from './routes/cartroute.js';
 import orderRouter from './routes/orderroute.js';
+import recommendationRouter from './routes/recommendationroute.js';
 
 
 //app config
@@ -28,6 +29,7 @@ app.use('/images', express.static('uploads'))
 app.use('/app/user', userRouter);
 app.use('/app/cart', cartRouter)
 app.use('/app/order', orderRouter)
+app.use('/app/recommendations', recommendationRouter)
 
 
 app.get('/', (req, res) => {
