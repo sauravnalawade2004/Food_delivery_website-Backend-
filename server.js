@@ -3,14 +3,19 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import { ConnectDB } from './config/db.js';
-import foodRouter from './routes/foodroute.js';
+import productRouter from './routes/productroute.js';
 import userRouter from './routes/userroute.js';
 import cartRouter from './routes/cartroute.js';
 import orderRouter from './routes/orderroute.js';
+import recommendationRouter from './routes/recommendationroute.js';
+import contactUsRouter from './routes/contactusroute.js';
+import EnquiryRouter from './routes/enquiryroutes.js';
+import apiProductsRouter from './routes/apiproducts.js';
+import adminAuthRouter from './routes/adminauthroute.js';
 
 
 //app config
-const app =express();
+const app = express();
 const port = Number(process.env.PORT) || 3000;
 
 
@@ -20,18 +25,29 @@ app.use(cors());
 
 
 //DB config
-ConnectDB();
+ConnectDB()
+
 
 //api routes
-app.use('/app/food', foodRouter)
+// Admin authentication routes
+app.use('/admin/auth', adminAuthRouter)
+
+app.use('/app/food', productRouter)
 app.use('/images', express.static('uploads'))
 app.use('/app/user', userRouter);
 app.use('/app/cart', cartRouter)
 app.use('/app/order', orderRouter)
+app.use('/app/recommendations', recommendationRouter)
+app.use('/app/contactus', contactUsRouter);
+app.use('/app/enquiry', EnquiryRouter)
+
+
+app.use('/api/products', apiProductsRouter);
+
 
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+    res.send('Hello World!');
 });
 
 
@@ -40,9 +56,5 @@ const server = app.listen(port, () => {
     console.log(`server listening on port ${port}`);
 });
 
-server.on('error', (err) => {
-    console.error('Server error:', err);
-    if (err.code === 'EADDRINUSE') {
-        console.error(`Port ${port} is already in use. Please use a different port.`);
-    }
-});
+
+
