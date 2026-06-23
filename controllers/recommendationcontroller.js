@@ -2,8 +2,12 @@ import recommendationEngine from "../services/recommendationEngine.js";
 
 const getRecommendationsForUser = async (req, res) => {
     try {
+<<<<<<< HEAD
         // Prefer the authenticated user id set by auth middleware, fallback to body or query
         const userId = req.userId || req.body?.userId || req.query?.userId;
+=======
+        const userId = req.userId;
+>>>>>>> 3dce99f7010f1c2f764e23c863c382796b0a25a6
         
         if (!userId) {
             return res.status(400).json({

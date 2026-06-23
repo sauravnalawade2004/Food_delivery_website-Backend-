@@ -1,5 +1,9 @@
 import orderModel from "../models/ordermodel.js";
+<<<<<<< HEAD
 import { Product } from "../models/Productmodel.js";
+=======
+import { foodModel } from "../models/Foodmodel.js";
+>>>>>>> 3dce99f7010f1c2f764e23c863c382796b0a25a6
 
 class RecommendationEngine {
     constructor() {
@@ -16,6 +20,7 @@ class RecommendationEngine {
 
     async getUserRecommendations(userId, limit = 6) {
         try {
+<<<<<<< HEAD
             const userOrders = await orderModel.find({ userId }).sort({ date: -1 });
 
             if (userOrders.length === 0) {
@@ -23,12 +28,32 @@ class RecommendationEngine {
             }
 
             const userPreferences = await this.analyzeUserPreferences(userOrders);
+=======
+            console.log('Getting recommendations for userId:', userId);
+            const userOrders = await orderModel.find({ userId }).sort({ date: -1 });
+            console.log('Found user orders:', userOrders.length);
+            
+            if (userOrders.length === 0) {
+                console.log('No orders found, returning popular items');
+                return await this.getPopularItems(limit);
+            }
+
+            console.log('Sample order data:', JSON.stringify(userOrders[0], null, 2));
+            const userPreferences = await this.analyzeUserPreferences(userOrders);
+            console.log('User preferences:', userPreferences);
+>>>>>>> 3dce99f7010f1c2f764e23c863c382796b0a25a6
             const recommendations = [];
 
             recommendations.push(...await this.getCategoryBasedRecommendations(userPreferences, limit / 2));
             recommendations.push(...await this.getFrequentlyBoughtTogether(userOrders, limit / 2));
 
+<<<<<<< HEAD
             return this.removeDuplicatesAndSort(recommendations, limit);
+=======
+            const finalRecommendations = this.removeDuplicatesAndSort(recommendations, limit);
+            console.log('Final recommendations:', finalRecommendations.length);
+            return finalRecommendations;
+>>>>>>> 3dce99f7010f1c2f764e23c863c382796b0a25a6
         } catch (error) {
             console.error('Error generating user recommendations:', error);
             return await this.getPopularItems(limit);
@@ -42,7 +67,11 @@ class RecommendationEngine {
 
             allOrders.forEach(order => {
                 const itemIds = order.items.map(item => item.itemId || item._id);
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> 3dce99f7010f1c2f764e23c863c382796b0a25a6
                 if (itemIds.includes(itemId)) {
                     itemIds.forEach(id => {
                         if (id !== itemId) {
@@ -77,6 +106,7 @@ class RecommendationEngine {
     }
 
     async analyzeUserPreferences(userOrders) {
+<<<<<<< HEAD
         const categoryCount = new Map();
         const itemFrequency = new Map();
 
@@ -87,6 +117,26 @@ class RecommendationEngine {
             });
         });
 
+=======
+        console.log('Analyzing preferences for orders:', userOrders.length);
+        const categoryCount = new Map();
+        const itemFrequency = new Map();
+
+        userOrders.forEach((order, orderIndex) => {
+            console.log(`Order ${orderIndex} items:`, order.items);
+            order.items.forEach(item => {
+                console.log('Processing item:', item);
+                const itemId = item.itemId || item._id || item.id;
+                console.log('Item ID extracted:', itemId);
+                if (itemId) {
+                    itemFrequency.set(itemId, (itemFrequency.get(itemId) || 0) + 1);
+                }
+            });
+        });
+
+        console.log('Item frequency map:', Array.from(itemFrequency.entries()));
+
+>>>>>>> 3dce99f7010f1c2f764e23c863c382796b0a25a6
         for (const [itemId, count] of itemFrequency) {
             try {
                 const food = await foodModel.findById(itemId);
@@ -98,10 +148,19 @@ class RecommendationEngine {
             }
         }
 
+<<<<<<< HEAD
         return {
             favoriteCategories: Array.from(categoryCount.entries()).sort((a, b) => b[1] - a[1]),
             favoriteItems: Array.from(itemFrequency.entries()).sort((a, b) => b[1] - a[1])
         };
+=======
+        const result = {
+            favoriteCategories: Array.from(categoryCount.entries()).sort((a, b) => b[1] - a[1]),
+            favoriteItems: Array.from(itemFrequency.entries()).sort((a, b) => b[1] - a[1])
+        };
+        console.log('Final user preferences:', result);
+        return result;
+>>>>>>> 3dce99f7010f1c2f764e23c863c382796b0a25a6
     }
 
     async getCategoryBasedRecommendations(userPreferences, limit) {
@@ -110,9 +169,15 @@ class RecommendationEngine {
 
         for (const [category, count] of favoriteCategories) {
             const relatedCategories = this.categoryMappings[category] || [];
+<<<<<<< HEAD
 
             for (const relatedCategory of relatedCategories) {
                 const items = await productModel.find({ category: relatedCategory }).limit(2);
+=======
+            
+            for (const relatedCategory of relatedCategories) {
+                const items = await foodModel.find({ category: relatedCategory }).limit(2);
+>>>>>>> 3dce99f7010f1c2f764e23c863c382796b0a25a6
                 items.forEach(item => {
                     recommendations.push({
                         ...item.toObject(),
@@ -132,7 +197,11 @@ class RecommendationEngine {
 
         userOrders.forEach(order => {
             const itemIds = order.items.map(item => item.itemId || item._id);
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> 3dce99f7010f1c2f764e23c863c382796b0a25a6
             for (let i = 0; i < itemIds.length; i++) {
                 for (let j = i + 1; j < itemIds.length; j++) {
                     const pair = [itemIds[i], itemIds[j]].sort().join('-');
@@ -150,9 +219,15 @@ class RecommendationEngine {
 
         for (const [pair, frequency] of sortedPairs) {
             const [item1, item2] = pair.split('-');
+<<<<<<< HEAD
 
             if (!processedItems.has(item1) && recommendations.length < limit) {
                 const food = await productModel.findById(item1);
+=======
+            
+            if (!processedItems.has(item1) && recommendations.length < limit) {
+                const food = await foodModel.findById(item1);
+>>>>>>> 3dce99f7010f1c2f764e23c863c382796b0a25a6
                 if (food) {
                     recommendations.push({
                         ...food.toObject(),
@@ -163,9 +238,15 @@ class RecommendationEngine {
                     processedItems.add(item1);
                 }
             }
+<<<<<<< HEAD
 
             if (!processedItems.has(item2) && recommendations.length < limit) {
                 const food = await productModel.findById(item2);
+=======
+            
+            if (!processedItems.has(item2) && recommendations.length < limit) {
+                const food = await foodModel.findById(item2);
+>>>>>>> 3dce99f7010f1c2f764e23c863c382796b0a25a6
                 if (food) {
                     recommendations.push({
                         ...food.toObject(),
@@ -199,7 +280,11 @@ class RecommendationEngine {
 
             const recommendations = [];
             for (const [itemId, popularity] of sortedItems) {
+<<<<<<< HEAD
                 const food = await productModel.findById(itemId);
+=======
+                const food = await foodModel.findById(itemId);
+>>>>>>> 3dce99f7010f1c2f764e23c863c382796b0a25a6
                 if (food) {
                     recommendations.push({
                         ...food.toObject(),
@@ -213,7 +298,11 @@ class RecommendationEngine {
             return recommendations;
         } catch (error) {
             console.error('Error getting popular items:', error);
+<<<<<<< HEAD
             return await productModel.find().limit(limit).map(item => ({
+=======
+            return await foodModel.find().limit(limit).map(item => ({
+>>>>>>> 3dce99f7010f1c2f764e23c863c382796b0a25a6
                 ...item.toObject(),
                 recommendationType: 'popular',
                 score: 1,
@@ -224,12 +313,21 @@ class RecommendationEngine {
 
     async getCategoryItems(itemId, limit = 4) {
         try {
+<<<<<<< HEAD
             const item = await productModel.findById(itemId);
             if (!item) return [];
 
             const categoryItems = await productModel.find({
                 category: item.category,
                 _id: { $ne: itemId }
+=======
+            const item = await foodModel.findById(itemId);
+            if (!item) return [];
+
+            const categoryItems = await foodModel.find({ 
+                category: item.category, 
+                _id: { $ne: itemId } 
+>>>>>>> 3dce99f7010f1c2f764e23c863c382796b0a25a6
             }).limit(limit);
 
             return categoryItems.map(food => ({
@@ -246,7 +344,11 @@ class RecommendationEngine {
 
     removeDuplicatesAndSort(recommendations, limit) {
         const uniqueItems = new Map();
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 3dce99f7010f1c2f764e23c863c382796b0a25a6
         recommendations.forEach(rec => {
             if (!uniqueItems.has(rec._id)) {
                 uniqueItems.set(rec._id, rec);
