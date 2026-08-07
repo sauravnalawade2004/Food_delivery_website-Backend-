@@ -8,13 +8,12 @@ import userRouter from './routes/userroute.js';
 import cartRouter from './routes/cartroute.js';
 import orderRouter from './routes/orderroute.js';
 import recommendationRouter from './routes/recommendationroute.js';
-<<<<<<< HEAD
+
 import contactUsRouter from './routes/contactusroute.js';
 import EnquiryRouter from './routes/enquiryroutes.js';
 import apiProductsRouter from './routes/apiproducts.js';
 import adminAuthRouter from './routes/adminauthroute.js';
-=======
->>>>>>> 3dce99f7010f1c2f764e23c863c382796b0a25a6
+
 
 
 //app config
@@ -41,15 +40,13 @@ app.use('/app/user', userRouter);
 app.use('/app/cart', cartRouter)
 app.use('/app/order', orderRouter)
 app.use('/app/recommendations', recommendationRouter)
-<<<<<<< HEAD
+
 app.use('/app/contactus', contactUsRouter);
 app.use('/app/enquiry', EnquiryRouter)
 
 
 app.use('/api/products', apiProductsRouter);
 
-=======
->>>>>>> 3dce99f7010f1c2f764e23c863c382796b0a25a6
 
 
 app.get('/', (req, res) => {
